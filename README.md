@@ -13,6 +13,9 @@
 
 - [x] prompt opencode server poc
 - [x] prompt opencode /global/health poc
-- [ ] run `opencode serve`
+- [x] run `opencode serve`
 - [ ] create new session
+- [ ] repeatable way to delete sessions
+- [x] show list of sessions
+- 
 

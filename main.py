@@ -12,7 +12,14 @@ def checke_health():
 def delete_session(sid):
     s = requests.delete(ENDPOINT + "/session/" + sid)
 
+def create_session():
+    c = requests.post(ENDPOINT + "/session/")
+    return c.text()
+
+def list_all_sessions():
+    ls = requests.get(ENDPOINT + "/session")
+    return ls.json()
 def main():
-    print(checke_health())
+    print(list_all_sessions())
 if __name__ == "__main__":
     main()
