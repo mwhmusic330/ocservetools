@@ -13,13 +13,12 @@ def delete_session(sid):
     s = requests.delete(ENDPOINT + "/session/" + sid)
 
 def create_session():
-    c = requests.post(ENDPOINT + "/session/")
-    return c.text()
-
+    c = requests.post(ENDPOINT + "/session")
+    return c.json()
 def list_all_sessions():
     ls = requests.get(ENDPOINT + "/session")
     return ls.json()
 def main():
-    print(list_all_sessions())
+    print(create_session())
 if __name__ == "__main__":
     main()
