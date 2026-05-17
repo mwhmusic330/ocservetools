@@ -11,6 +11,9 @@ parser = argparse.ArgumentParser(
     epilog='idk dude, we just built this.'
 )
 parser.add_argument('-s', '--status', action='store_true')
+parser.add_argument('-a', '--add', action='store_true')
+parser.add_argument('-d', '--delete', action='store_true')
+parser.add_argument('-l', '--list', action='store_true')
 def checke_health():
     r = requests.get(ENDPOINT + "/global/health")
     return r.json()
