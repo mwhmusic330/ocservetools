@@ -25,12 +25,12 @@ def delete_session(sid):
 def create_session():
     c = requests.post(ENDPOINT + "/session")
     return c.json()
+
 def list_all_sessions():
     ls = requests.get(ENDPOINT + "/session")
     data = ls.json()
     for item in data:
         print(f"{item["id"]}, {item["title"]}")
-
 
 def main():
     args = parser.parse_args()
