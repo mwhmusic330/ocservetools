@@ -14,9 +14,9 @@ parser.add_argument('-s', '--status', action='store_true')
 parser.add_argument('-a', '--add', action='store_true')
 parser.add_argument('-d', '--delete', action='store_true')
 parser.add_argument('-l', '--list', action='store_true')
-def checke_health():
+def check_health():
     r = requests.get(ENDPOINT + "/global/health")
-    return r.json()
+    print(r.json())
 
 def delete_session(sid):
     s = requests.delete(ENDPOINT + "/session/" + sid)
@@ -35,7 +35,13 @@ def list_all_sessions():
 def main():
     args = parser.parse_args()
     if args.status:
+        check_health()
+    if args.add:
         print(checke_health())
+    if args.delete:
+        print(checke_health())
+    if args.list:
+        list_all_sessions()
 
 if __name__ == "__main__":
     main()
