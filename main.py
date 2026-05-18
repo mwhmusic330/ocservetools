@@ -47,7 +47,7 @@ def main():
     args = parser.parse_args()
     if parser_a:
         check_health()
-    if args.add:
+    if parser_b:
         create_session()
     if args.delete:
         delete_session(sid)
