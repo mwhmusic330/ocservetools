@@ -32,11 +32,11 @@ def check_health():
 
 def delete_session(sid):
     s = make_request('DELETE',"rsession/" + sid)
-    return s
+    print(s)
 
 def create_session():
-    c = requests.post('POST',"/session")
-    return c
+    c = make_request('POST',"/session")
+    print(c)
 
 def list_all_sessions():
     ls = make_request(endpoint="/session")
@@ -48,9 +48,9 @@ def main():
     if parser_a:
         check_health()
     if args.add:
-        print(create_session())
+        create_session()
     if args.delete:
-        print(delete_session(sid))
+        delete_session(sid)
     if args.list:
         list_all_sessions()
 if __name__ == "__main__":
