@@ -10,10 +10,17 @@ parser = argparse.ArgumentParser(
     description='cli tool for opencode server',
     epilog='idk dude, we just built this.'
 )
+
+subparsers = parser.add_subparsers(help='subcommand help')
+
 parser.add_argument('-s', '--status', action='store_true')
 parser.add_argument('-a', '--add', action='store_true')
 parser.add_argument('-d', '--delete', action='store_true')
 parser.add_argument('-l', '--list', action='store_true')
+
+parser_a = subparsers.add_parser('status', help= 'status help')
+parser_b = subparsers.add_parser('add', help= 'add help')
+
 
 def make_request(method: str ='GET', endpoint: str ='') -> dict:
     r = requests.request(method, BASE_URL + endpoint)
@@ -38,7 +45,7 @@ def list_all_sessions():
 
 def main():
     args = parser.parse_args()
-    if args.status:
+    if parser_a:
         check_health()
     if args.add:
         print(create_session())
@@ -46,6 +53,5 @@ def main():
         print(delete_session(sid))
     if args.list:
         list_all_sessions()
-
 if __name__ == "__main__":
     main()
