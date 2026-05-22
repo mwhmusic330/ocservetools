@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser(
     epilog='idk dude, we just built this.'
 )
 
-subparsers = parser.add_subparsers(help='subcommand help')
+subparsers = parser.add_subparsers(dest='command', help='subcommand help')
 
 parser.add_argument('-s', '--status', action='store_true')
 parser.add_argument('-a', '--add', action='store_true')
@@ -20,6 +20,7 @@ parser.add_argument('-l', '--list', action='store_true')
 
 parser_a = subparsers.add_parser('status', help= 'status help')
 parser_b = subparsers.add_parser('add', help= 'add help')
+parser_c = subparsers.add_parser('all', help= 'all help')
 
 
 def make_request(method: str ='GET', endpoint: str ='') -> dict:
@@ -38,6 +39,10 @@ def create_session():
     c = make_request('POST',"/session")
     print(c)
 
+def status_sessions():
+    ss = make_request(endpoint="/session/status")
+    print(ss)
+
 def list_all_sessions():
     ls = make_request(endpoint="/session")
     for item in ls:
@@ -45,10 +50,12 @@ def list_all_sessions():
 
 def main():
     args = parser.parse_args()
-    if parser_a:
+    if args.command == 'status':
         check_health()
-    if parser_b:
+    if args.command == 'add':
         create_session()
+    if args.command == 'all':
+        status_sessions()
     if args.delete:
         delete_session(sid)
     if args.list:
