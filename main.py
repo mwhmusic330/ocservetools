@@ -13,40 +13,51 @@ parser = argparse.ArgumentParser(
 
 subparsers = parser.add_subparsers(dest='command', help='subcommand help')
 
-parser.add_argument('-s', '--status', action='store_true')
-parser.add_argument('-a', '--add', action='store_true')
 parser.add_argument('-d', '--delete', action='store_true')
 parser.add_argument('-l', '--list', action='store_true')
 
-parser_a = subparsers.add_parser('status', help= 'status help')
-parser_b = subparsers.add_parser('add', help= 'add help')
-parser_c = subparsers.add_parser('all', help= 'all help')
+parser_status = subparsers.add_parser('status', help= 'status help')
+parser_add = subparsers.add_parser('add', help= 'add help')
+parser_statusall = subparsers.add_parser('all', help= 'all help')
 
 
 def make_request(method: str ='GET', endpoint: str ='') -> dict:
     r = requests.request(method, BASE_URL + endpoint)
     return r.json()
 
-def check_health():
+def find_session_id(slug: str) -> str:
+    ls = make_request(endpoint="/session")
+    slug = slug.lower()
+    for item in ls:
+        if item["slug"] == slug:
+            return item["id"]
+    return "slug not found"
+
+def user_delete_session() -> None:
+    user = input("Input slug here:").lower()
+    sid = find_session_id(user)
+    delete_session(sid)
+
+def check_health() -> None:
     r = make_request(endpoint="/global/health")
     print(r)
 
-def delete_session(sid):
-    s = make_request('DELETE',"rsession/" + sid)
+def delete_session(sid) -> None:
+    s = make_request('DELETE',"/session/" + sid)
     print(s)
 
-def create_session():
+def create_session() -> None:
     c = make_request('POST',"/session")
     print(c)
 
-def status_sessions():
+def status_sessions() -> None:
     ss = make_request(endpoint="/session/status")
     print(ss)
 
-def list_all_sessions():
+def list_all_sessions() -> None:
     ls = make_request(endpoint="/session")
     for item in ls:
-        print(f"{item["id"]}, {item["title"]}")
+        print(f'{item["slug"]}, {item["title"]}')
 
 def main():
     args = parser.parse_args()
@@ -57,7 +68,7 @@ def main():
     if args.command == 'all':
         status_sessions()
     if args.delete:
-        delete_session(sid)
+        user_delete_session()
     if args.list:
         list_all_sessions()
 if __name__ == "__main__":
