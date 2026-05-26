@@ -50,17 +50,26 @@ def create_session() -> None:
 def send_message_wait(sid: str, message: str) -> None:
     data = {"parts": [{"type": "text", "text": message}]}
     c = make_request('POST',f"/session/{sid}/message", data=data)
-    for item in c:
-        print(item)
+    for item in c["parts"]:
+        if item.get("type") == "text":
+            print(item["text"])
 
 def status_sessions() -> None:
     ss = make_request(endpoint="/session/status")
     print(ss)
 
+def select_session() -> str:
+    ls = make_request(endpoint="/session")
+    for s, item in enumerate(ls,1):
+        print(f'{s}. {item["slug"]}, {item["title"]}')
+    choice = int(input("Select session number: ")) - 1
+    return ls[choice]['slug']
+
+
 def list_all_sessions() -> None:
     ls = make_request(endpoint="/session")
-    for item in ls:
-        print(f'{item["slug"]}, {item["title"]}')
+    for s, item in enumerate(ls,1):
+        print(f'{s}. {item["slug"]}, {item["title"]}')
 
 def main():
     args = parser.parse_args()
@@ -74,15 +83,11 @@ def main():
         sid = find_session_id(args.delete)
         delete_session(sid)
     if args.message:
-        slug = input("Input slug here:").lower()
+        slug = select_session()
         sid = find_session_id(slug)
         send_message_wait(sid, args.message)
-
     if args.list:
         list_all_sessions()
     if args.command == 'test':
-       slug = input("Input slug here:").lower()
-       sid = find_session_id(slug)
-       send_message_wait(sid)
 if __name__ == "__main__":
     main()
